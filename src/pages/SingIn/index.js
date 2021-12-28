@@ -59,7 +59,7 @@ export default function SignIn() {
         <SafeAreaView style={styles.container}>
 
             <Text style={styles.logo}>HeyGrupos</Text>
-            <Text style={{ marginBottom: 20, padding: 15 }}>Ajude, colabore, faça networking!</Text>
+            <Text style={{ marginBottom: 20, padding: 15, fontSize: 18 }}>Ajude, colabore, faça networking!</Text>
 
             { type && (
                     <TextInput 
@@ -143,5 +143,5 @@ export default function SignIn() {
             color: '#fff',
             fontWeight: 'bold',
             fontSize: 19
-        }
+        },
     })
