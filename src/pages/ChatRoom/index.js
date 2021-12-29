@@ -5,7 +5,9 @@ import {View,
         TouchableOpacity,
         FlatList,
         Modal,
-        ActivityIndicator  } from "react-native";
+        ActivityIndicator,
+        Alert
+        } from "react-native";
 
 import React, { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
@@ -18,6 +20,8 @@ import ChatList from "../../components/ChatList";
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+
+// --------------------------------------------------------------------------------------
 
 export default function ChatRoom() {
 
@@ -32,7 +36,7 @@ export default function ChatRoom() {
 
     useEffect(() => {
         const hasUser = auth().currentUser ? auth().currentUser.toJSON() : null;
-        console.log(hasUser)
+        // console.log(hasUser)
 
         setUser(hasUser);
 
@@ -62,7 +66,6 @@ export default function ChatRoom() {
                 if(isActive) {
                     setThreads(threads);
                     setLoading(false);
-                    console.log(threads)
                 }
 
             })
@@ -88,6 +91,36 @@ export default function ChatRoom() {
        .catch(() => {
         console.log("Sem usuario....")
        })
+    }
+
+    function deleteRoom(ownerId, idRoom) {
+        // Verifica se quem está querendo deleter é de fato dono do grupo
+        if(ownerId !== user?.uid) return;
+
+        Alert.alert(
+            "Atenção!",
+            "Você tem certeza que deseja deletar essa sala?",
+            [
+                {
+                    text: "Cancelar",
+                    onPress: () => {},
+                    style: "cancel"
+                },
+                {
+                    text: "OK",
+                    onPress: () => handleDeleteRom(idRoom),
+                }
+            ]
+        )
+    }
+
+   async function handleDeleteRom(idRoom) {
+    await firestore()
+    .collection('MESSAGE_THREADS')
+    .doc(idRoom)
+    .delete();
+
+    setUpdateModal(!updateModal);
     }
 
     if(loading) {
@@ -121,7 +154,7 @@ export default function ChatRoom() {
             keyExtractor={ item => item._id }
             showsVerticalScrollIndicator={false}
             renderItem={ ({ item }) => (
-                <ChatList data={item} />
+                <ChatList data={item} deleteRoom={ () => deleteRoom(item.owner, item._id) }/>
             )}
             />
 
