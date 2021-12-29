@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, SafeAreaView, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity } from "react-native";
 import Feather from 'react-native-vector-icons/Feather';
 
-
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 import ChatMessage from '../../components/ChatMessage';
 
 export default function Messages({ route }) {
+
     const { threads } = route.params;
     const [messages, setMessages] = useState([]);
+
     const [input, setInput] = useState('');
+
+    const user = auth().currentUser.toJSON();
 
     useEffect(() => {
 
@@ -43,11 +46,9 @@ export default function Messages({ route }) {
             setMessages(messages)
         })
 
-        return () => {
-            unsubscripbeLisnner()
-        }
+        return () => unsubscripbeLisnner()
 
-    }, [])
+    }, []);
 
     async function handleSend() {
 
@@ -100,6 +101,8 @@ export default function Messages({ route }) {
         >
 
             <View style={styles.containerInput}>
+
+
                 <View style={styles.mainContainerInput}>
                     <TextInput 
                     placeholder="Sua mensagem"
@@ -110,14 +113,15 @@ export default function Messages({ route }) {
                     autoCorrect={false}
                     />
                 </View>
-            <TouchableOpacity onPress={handleSend}>
+
+            <TouchableOpacity onPress={handleSend} >
                 <View style={styles.buttonContainer}>
                    <Feather name="send" size={23} color="#FFF"/>
                 </View>
+
             </TouchableOpacity>
+            
             </View>
-
-
         </KeyboardAvoidingView>
 
         </SafeAreaView>
