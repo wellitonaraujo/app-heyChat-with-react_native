@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFe
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
-export default function ModalNewRoom({ setVisible }) {
+export default function ModalNewRoom({ setVisible, setUpdateModal }) {
     const [ roomname, setRoomName ] = useState('');
 
     const user = auth().currentUser.toJSON();
@@ -37,6 +37,7 @@ export default function ModalNewRoom({ setVisible }) {
             .then(() => {
                 // Fechar modal
                 setVisible();
+                setUpdateModal();
             })
 
         })
