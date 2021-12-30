@@ -1,4 +1,4 @@
-package com.appw;
+package com.heyGrupos;
 
 import com.facebook.react.ReactActivity;
 
